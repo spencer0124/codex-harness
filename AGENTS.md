@@ -24,7 +24,7 @@ Scope = README + task instructions + stakeholder (업무 담당자) answers reco
 | 4 write-up | `$writeup` | REPORT.md, AI_COLLABORATION.md, `docs/RISKS.md` | the claim audit finds nothing |
 | 5 practice | `$drill` (I start it) | `.study/` only | `bash scripts/presubmit.sh` exits 0 |
 
-At the start of phase 1, ask me for the end time and fill the Timebox in PLAN.md. Respect its freeze times: no new feature after the feature freeze, no doc change after the doc freeze except fixes the claim audit asks for.
+In its first reply, `$analyze` asks me for the end time; fill the Timebox in PLAN.md from it. Respect its freeze times: no new feature after the feature freeze, no doc change after the doc freeze except fixes the claim audit asks for.
 
 ## 4. Orchestrator
 - This session plans, dispatches, checks results, and updates PLAN.md. It does not edit source code or tests itself.
