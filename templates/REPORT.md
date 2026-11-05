@@ -27,6 +27,13 @@
 | ASSUMED | 답이 없어 정한 기본값(A#)에 기대고 있다 | `docs/analysis/CONDITIONS.md`의 A#를 읽는다 |
 | NOT-IMPLEMENTED | 만들지 않았다 | 9절 미구현 목록 |
 
+### 규칙 준수
+결과가 깨면 안 되는 규칙마다 한 줄. `src/domain/check.ts`는 생성 코드와 따로, 입력과 결과만 보고 판정한다.
+
+| 규칙 (C#) | 검사 (`src/domain/check.ts`:함수) | 언제 도나 | 테스트 | E# | 상태 |
+|---|---|---|---|---|---|
+| | | 저장 전 매번 / 테스트에서만 | | | |
+
 ## 5. 핵심 결정
 상세는 `DECISIONS.md`에 있다. D#마다 한 줄.
 - D1:
@@ -41,6 +48,8 @@
 `npx tsx scripts/what-if.mjs src/domain/what-if-entry.ts scripts/what-if.scenarios.json` 출력 그대로 (E#):
 
 <표 붙여넣기>
+
+`baseline` 행은 가장 단순한 방법(<무엇>)으로 같은 데이터를 돌린 결과다. 결과가 나아졌다는 말은 이 행과의 차이로만 한다.
 
 | 변형 | 무엇이 바뀌었나 | 왜 (코드 근거) |
 |---|---|---|

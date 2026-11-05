@@ -7,7 +7,7 @@ One npm package, ESM, TypeScript strict.
 
 | Path | Holds | Rule |
 |---|---|---|
-| `src/domain/` | types and pure functions: input parsing results, rules, the core algorithm, metrics | No I/O, no Express, no React. Data in, data out. |
+| `src/domain/` | types and pure functions: input parsing results, rules, the core algorithm, `check.ts` (the hard-rule check on a finished result), metrics | No I/O, no Express, no React. Data in, data out. |
 | `src/server/` | `app.ts` (`createApp({ store, now })`), `main.ts` (listen), routes, `schemas.ts` (zod), `store.ts` | zod parses every request body and uploaded file before domain code sees it. |
 | `src/web/` | `index.html`, `main.tsx`, `App.tsx`, `api.ts`, components | Talks to the server only through `api.ts`. Imports types from `src/domain/`. |
 | `tests/` | `*.test.ts`: domain unit tests, route tests with supertest | Names start with the R#. |

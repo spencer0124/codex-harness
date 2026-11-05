@@ -29,23 +29,24 @@ Every number in a doc is copied from an E#. Never type a number from memory.
 Fill `REPORT.md` section by section from its template.
 
 - Traceability: one row per R#. Status is one of VERIFIED (a test or smoke line passed, E# cited), HUMAN-CHECKED (the user saw it in the preview, or ran a step 1.4 spot-check; record what, where, and when, and cite the E#), ASSUMED (rests on an A#), NOT-IMPLEMENTED. Fill "확인 방법" for every row: the command to rerun, the preview path and steps, or the A# to read.
-- 지표와 민감도: each metric's definition as the code computes it (`file:function`), the what-if table from step 1 pasted as printed, one line per variant on what changed and which code explains it, then the limits of each metric and what is still unmeasured. If a prediction and a measurement disagree, write both.
+- 규칙 준수: one row per hard rule, from `src/domain/check.ts` and its tests. Say whether the check runs before every save or only in tests. A rule with no check is 미검증.
+- 지표와 민감도: each metric's definition as the code computes it (`file:function`), the what-if table from step 1 pasted as printed, one line per variant on what changed and which code explains it, then the limits of each metric and what is still unmeasured. A claim that the result is better cites its difference from the `baseline` row, with the E#. With no `baseline` row, write that the improvement is unmeasured. If a prediction and a measurement disagree, write both.
 - Limitations: weakness (`file:function`), when it breaks, the next check.
 
 ## 3. docs/RISKS.md
 
-Fill one row per situation in the template: condition change, mid-way failure, concurrent requests, boundary dates, hidden conditions (one row per C# that came from a stakeholder answer and adds an exception), abnormal input. With a login, also rows 7 to 9 (`plan/references/web-security.md`); without one, delete them. For each row, read the code path and write what it does now with `file:function` and the test that proves it. With no test, write 미검증 in the evidence column. Name what happens to the previous result.
+Fill one row per situation in the template: condition change, mid-way failure, concurrent requests, boundary dates, hidden conditions (one row per C# that came from a stakeholder answer and adds an exception), abnormal input. With a login, also rows 7 to 9 (`plan/references/web-security.md`); without one, delete them. Split row 4 into one row per combination the data or a C# makes possible (4a, 4b, …): a span that crosses midnight on the period's last day or into a day with other rules, a special day on the first or last day, an entity absent on a day it would otherwise be served. For each row, read the code path and write what it does now with `file:function` and the test that proves it. With no test, write 미검증 in the evidence column. Name what happens to the previous result.
 
 ## 4. AI_COLLABORATION.md
 
 1. Count F# rows by verdict in `docs/AI_LOG.md` (`grep -cE '^\| F[0-9]+ .*\| 수용 \|' docs/AI_LOG.md`, same for 수정 and 폐기). Put the counts and the commands in section 2.
 2. Pick two or three cases. A case qualifies only if its chain is complete in the repo: how it was found → reproduce command and output (E#) → failing test (E# with FAIL) → fix (`file:function`, commit) → passing suite (E# with PASS) → a verdict with evidence for each AI output involved. Prefer a case where an AI output was modified or discarded on evidence, and a case that shows where the AI fell short.
-3. Fill each case in the template's shape. Use only facts from AI_LOG, EVIDENCE, and `git log`. If a link in the chain is missing, drop the case.
-4. "어려웠던 점" names concrete problems: what went wrong, how it surfaced, how long it cost, how it was recovered. Link each to a case or an F#.
+3. Fill each case in the template's shape. Use only facts from AI_LOG, EVIDENCE, and `git log`. 발견 names the command and output, or what was seen on screen, that revealed the problem. The verdict table has one row per AI output: the test it wrote, the code it wrote, and the review finding, each with its own verdict and evidence. If a link in the chain is missing, drop the case.
+4. "어려웠던 점" names concrete problems: what went wrong, how it surfaced, how long it cost, how it was recovered. Link each to a case or an F# whose chain has commands and outputs. Cut a problem you cannot link that way.
 
 ## 5. DECISIONS.md
 
-D1 holds the core decision, the one the product depends on. Check that it has every field in the template: how it works with `file:function`, each rejected alternative and how it differs, what was given up, evidence, known weakness. Fill gaps from the code and the change log. Never invent an alternative that was not considered.
+D1 holds the core decision, the one the product depends on. Check that it has every field in the template: the criterion in priority order, how it works with `file:function`, each rejected alternative and how it differs (including the common families the `plan` skill lists, marked 검토만, 실측 안 함 where not run), what was given up, evidence, known weakness. Fill gaps from the code and the change log. Never claim an alternative was run or measured without an E# or a 되돌린 시도 row.
 
 ## 6. Claim audit
 

@@ -87,7 +87,14 @@ A UI check uses the `playwright-cli` command as 명령 and the screenshot path u
 - A commit cannot hold its own hash. The verifier fills the previous unit's 커밋 cell before committing. `$writeup` fills the last one.
 
 ## What-if step
-When the what-if entry unit is DONE, write `scripts/what-if.scenarios.json`: the base params from the real data plus one variant per input a C# names (each limit up and down, zero, a fractional value, an empty set, the largest size). Then run:
+When the what-if entry unit is DONE, write `scripts/what-if.scenarios.json`: the base params from the real data, plus these variants:
+
+- Each rule constant a C# names: up, down, zero, a fractional value.
+- Each numeric field of the input data (durations, distances, counts): all zero, fractional, one value missing. The entry applies these as params to a copy of the data.
+- An empty input set and the largest size.
+- `baseline`: the plainest method a reader would try first (one metric only, or no optimization) on the base data. The entry switches to it with a param.
+
+`run()` returns the number of broken rules from `src/domain/check.ts` as `ruleViolations`, next to the metrics. Then run:
 
 ```bash
 npx tsx scripts/what-if.mjs src/domain/what-if-entry.ts scripts/what-if.scenarios.json

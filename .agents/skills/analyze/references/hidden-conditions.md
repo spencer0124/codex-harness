@@ -17,6 +17,7 @@ Ask every P0 fact twice: once as a rule and once as a concrete example. "마감�
 - Recurring special days: month-end, the first or last given weekday of a month, weekly or monthly events, seasonal schedules. "매주 또는 매달 정해진 날에 평소와 다르게 운영하는 날이 있나요?"
 - Period boundaries: are the start and end dates included, which timezone, and what happens when the period starts or ends mid-week.
 - The day after the period ends: work or events that start inside the period and end after it. Outputs that need the following day.
+- Combinations, each asked as a concrete example: a span that crosses midnight on the period's last day, or into a day with other rules (a weekend, a holiday, a special day). A special day on the first or last day. An entity that is absent on a special day.
 - Week definition and date formats in input and output.
 
 ## Time

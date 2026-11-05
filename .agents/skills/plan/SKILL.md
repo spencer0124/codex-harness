@@ -24,8 +24,9 @@ Write the TypeScript types in `docs/ARCHITECTURE.md` under "데이터 모양": t
 
 ## 4. Decide the core logic
 Find the one piece of logic the task is really about (the algorithm, the rule engine, the scoring). It gets a D# with every field filled:
+- 기준: what counts as a better result, in priority order, and the `file:function` that computes it.
 - 동작 방식: 3 to 5 numbered steps a reader can follow without code.
-- 기각한 대안: 2 or 3 real alternatives, one line each on how they differ. If you did not measure one, write "검토만, 실측 안 함".
+- 기각한 대안: the alternatives you considered, plus each common family that fits this kind of problem: optimizing one metric only, a weighted sum of metrics, an exact or global solver, and, for a recommendation, modes or weights the user picks. One line each on how it differs. If you did not run one, write "검토만, 실측 안 함". Listing a family you reviewed is fine; claiming you ran one you did not is not.
 - 이유: why this one fits the C#s and the Timebox.
 - 포기한 것: what this choice gives up (optimality, speed, a feature, a case it handles badly).
 - 증거: test names now, a what-if E# later (`build` skill, what-if step).
@@ -35,8 +36,10 @@ If the choice is unclear, spawn up to 3 read-only `planner` agents, one per alte
 
 Log a D# for every other real choice only (storage, a library, a rule interpretation). Never invent alternatives.
 
+Then list the hard rules: every rule a result must never break, each from a C#. Plan `src/domain/check.ts` exporting `checkResult(input, result)`, which returns one entry per broken rule with the rule's C#. It reads only the inputs and the result, never the generator's internals, so it can catch the generator's mistakes. The generate route runs it on every result before saving. What a violation does follows the C# for infeasible input; without one, use the A# default: save nothing and answer 422 with the broken rules.
+
 ## 5. Write the flow and ownership
-In `docs/ARCHITECTURE.md`, for each user action (each button or route):
+In `docs/ARCHITECTURE.md`, for each user action (each button or route), headed by the button's label exactly as the screen shows it and its route:
 1. List the steps: 화면 → API → 검증 → 도메인 → 저장 → 응답과 화면 or 내보내기, with the file for each step.
 2. Say what happens on failure and which version the screen shows afterwards.
 
@@ -46,12 +49,12 @@ Fill the module table: 모듈 | 책임 | 소유 상태 | 상태를 바꾸는 주
 Write PLAN.md Units. Rules:
 - Each unit takes 20 to 45 minutes and ends in a named check: a test name, a smoke line, or a screenshot.
 - One writer at a time, so the build runs units in table order. Keep that order:
-  1. BE: types and the core logic with its unit tests.
+  1. BE: types, the core logic, and `src/domain/check.ts`, with unit tests that run the check on the core logic's output for the real data.
   2. BE: store and the stateful defaults.
   3. BE: routes with smoke lines. Fix the API contract (request and response types in `src/domain/`) here.
   4. FE: the first screen against the real API, so a human can open the preview early.
   5. Then alternate BE and FE units by R# priority.
-  6. BE: the what-if entry (`src/domain/what-if-entry.ts` exporting `run(params)`) once the core logic is DONE.
+  6. BE: the what-if entry (`src/domain/what-if-entry.ts` exporting `run(params)`, with a `baseline` param and a `ruleViolations` metric; `build` skill, what-if step) once the core logic is DONE.
 - Must units first. Should and Could units go after them and are the first to be cut at the feature freeze.
 - Each row lists the files it touches. Two units never touch the same file in one pass.
 
@@ -59,7 +62,7 @@ Write PLAN.md Units. Rules:
 Send one message and wait:
 1. The R# table: id, one-line requirement, source, priority.
 2. The U# table: id, lane, R#s, check, estimated minutes, and the total against the feature freeze.
-3. The core D# in five lines: how it works, the alternatives, why, what it gives up.
+3. The core D# in six lines: the criterion, how it works, the alternatives, why, what it gives up, and the hard rules `check.ts` will enforce.
 4. The A#s the plan relies on.
 5. One line for the user: during the routes unit Codex will ask once to run `npm run dev` in a separate terminal; leave it running and open its port in the preview.
 

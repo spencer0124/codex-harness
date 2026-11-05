@@ -27,7 +27,7 @@ Read README (the task), REPORT.md, DECISIONS.md, `docs/ARCHITECTURE.md`, `docs/R
 
 ## 2. Write the cards
 
-Read `references/slots.md`. Write one card per slot S1 to S6 into `.study/cards.md`, in Korean, in the card format there, including the conclusion line, the three keywords, and "말하면 안 되는 것". Every point must be true in the current code. Check it before you write it.
+Read `references/slots.md`. Write one card per slot S1 to S6 into `.study/cards.md`, in Korean, in the card format there: the conclusion line, the three keywords, both expected questions (A and B), "변형 대비", and "말하면 안 되는 것". Every point must be true in the current code. Check it before you write it.
 
 When grading (step 4), a statement from a card's "말하면 안 되는 것" counts as a wrong statement under Accuracy.
 
@@ -38,9 +38,11 @@ Tell the user these rules once, in Korean:
 - 기본 6문항, 문항당 5분. 휴대폰 타이머로 직접 잰다.
 - 답은 직접 친다. 복사, 붙여넣기, 카드나 코드 보기 없이.
 - 한 번 낸 답은 고치지 않는다. 다음 문항으로 넘어가면 돌아가지 않는다.
+- 350~500자. 첫 문장은 결론, 그다음 하위 질문 순서대로 `1) 2) 3)` 번호를 붙인다.
+- 질문에 괄호 안 목록이 있으면 항목 이름을 그대로 써서 하나씩 답한다.
 - 시간이 모자라면 먼저 하위 질문마다 한 문장씩 쓰고, 남은 시간에 파일 이름, 명령, 숫자를 붙인다.
 
-Ask one question at a time, built per `references/slots.md`. Do not show the card or any hint before the answer. Wait for the answer.
+Ask one question at a time, built per `references/slots.md`: shape A for each slot on the first pass. Do not show the card or any hint before the answer. Wait for the answer.
 
 ## 4. Grade each answer
 
@@ -48,7 +50,7 @@ Score out of 10 and show the breakdown:
 
 | Part | Points | Full marks when |
 |---|---|---|
-| Coverage | 4 | every sub-question gets an explicit answer, in order |
+| Coverage | 4 | every sub-question, and every item of the question's parenthetical list, gets an explicit answer, in order |
 | Accuracy | 3 | every factual statement matches the code and docs |
 | Specificity | 2 | the answer names files, commands, tests, or numbers |
 | Limits | 1 | the answer says what was given up, what breaks, or what is unverified |
@@ -65,7 +67,7 @@ Append to `.study/attempts.md`: time, slot, question, the answer verbatim, the b
 
 ## 5. Repeat the weak slots
 
-After the last question, show a table of slot, score, and the main miss. Re-ask the two weakest slots with variants from `references/slots.md`. Continue until the user stops.
+After the last question, show a table of slot, score, and the main miss. Re-ask the two weakest slots in shape B, then with the further variants in `references/slots.md`. Ask S4 in shape B even if it scored well: the two shapes test different knowledge. Continue until the user stops.
 
 ## 6. Collect weak claims
 
