@@ -3,8 +3,11 @@
 .agents/skills/drill/
 _workspace/
 .harness/
+.playwright-cli/
+.playwright/
 var/
 node_modules/
+__pycache__/
 dist/
 .env
 .env.*

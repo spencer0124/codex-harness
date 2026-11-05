@@ -24,8 +24,10 @@ if command -v git >/dev/null; then
   else row FAIL git "no user.name or user.email: the verifier cannot commit (git config --global user.name ...)"; fi
 else row FAIL git "not found"; fi
 
-if command -v playwright-cli >/dev/null || npx --no-install playwright-cli --version >/dev/null 2>&1; then row OK playwright "playwright-cli found"
-else row WARN playwright "playwright-cli missing: run bash scripts/install-tools.sh"; fi
+v=$(bash .agents/skills/ui/scripts/pw.sh --version 2>/dev/null | tail -1)
+[ "$v" = 0.1.22 ] && row OK playwright "playwright-cli $v" || row WARN playwright "playwright-cli ${v:-missing} (want 0.1.22): run bash scripts/install-tools.sh"
+
+v=$(ver python3 --version); [ -n "$v" ] && row OK python3 "$v" || row WARN python3 "not found: the humanize-korean skill needs it"
 
 code=$(curl -sS -m 5 -o /dev/null -w '%{http_code}' https://registry.npmjs.org/ 2>/dev/null)
 [ "$code" = 200 ] && row OK network "npm registry reachable" || row WARN network "npm registry unreachable (HTTP ${code:-none}): installs will fail"
