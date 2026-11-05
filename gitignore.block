@@ -1,0 +1,10 @@
+# >>> codex-harness: local only, never commit
+.study/
+.agents/skills/drill/
+_workspace/
+.harness/
+node_modules/
+dist/
+.env
+.env.*
+# <<< codex-harness
