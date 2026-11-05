@@ -20,6 +20,7 @@ PLAN.md (R#, U#, change log), DECISIONS.md, `docs/ARCHITECTURE.md`, `docs/analys
 1. Run the full test suite and `scripts/smoke.sh` against a running server. Rerun the what-if table with the command the `build` skill's what-if step uses (`npx tsx scripts/what-if.mjs src/domain/what-if-entry.ts scripts/what-if.scenarios.json`).
 2. Append one E# per command to `docs/EVIDENCE.md` in its existing entry format, output copied verbatim.
 3. If anything fails, stop the write-up and hand the failure back to the build loop.
+4. Spot-check by hand. Pick three records from the input data: an ordinary one, one at a boundary (a date edge, a limit), and one that a stakeholder C# makes an exception for. For each, give the user two short commands: one that prints the input row (`grep -n` or `sed -n` on the data file) and one that prints what the system produced for it (`curl -s` on the API, or a `node -e` one-liner over `var/`), plus one line on what should match. Do not wait; continue with step 2. When the user replies (`일치`, or what differs), write one E# per record with the commands as 명령, the user's words as 출력, and `판정: PASS (사람 확인)` or `판정: FAIL`. A mismatch goes back to the build loop.
 
 Every number in a doc is copied from an E#. Never type a number from memory.
 
@@ -27,13 +28,13 @@ Every number in a doc is copied from an E#. Never type a number from memory.
 
 Fill `REPORT.md` section by section from its template.
 
-- Traceability: one row per R#. Status is one of VERIFIED (a test or smoke line passed, E# cited), HUMAN-CHECKED (the user saw it in the preview; record what, where, and when), ASSUMED (rests on an A#), NOT-IMPLEMENTED. Fill "확인 방법" for every row: the command to rerun, the preview path and steps, or the A# to read.
+- Traceability: one row per R#. Status is one of VERIFIED (a test or smoke line passed, E# cited), HUMAN-CHECKED (the user saw it in the preview, or ran a step 1.4 spot-check; record what, where, and when, and cite the E#), ASSUMED (rests on an A#), NOT-IMPLEMENTED. Fill "확인 방법" for every row: the command to rerun, the preview path and steps, or the A# to read.
 - 지표와 민감도: each metric's definition as the code computes it (`file:function`), the what-if table from step 1 pasted as printed, one line per variant on what changed and which code explains it, then the limits of each metric and what is still unmeasured. If a prediction and a measurement disagree, write both.
 - Limitations: weakness (`file:function`), when it breaks, the next check.
 
 ## 3. docs/RISKS.md
 
-Fill one row per situation in the template: condition change, mid-way failure, concurrent requests, boundary dates, hidden conditions (one row per C# that came from a stakeholder answer and adds an exception), abnormal input. For each row, read the code path and write what it does now with `file:function` and the test that proves it. With no test, write 미검증 in the evidence column. Name what happens to the previous result.
+Fill one row per situation in the template: condition change, mid-way failure, concurrent requests, boundary dates, hidden conditions (one row per C# that came from a stakeholder answer and adds an exception), abnormal input. With a login, also rows 7 to 9 (`plan/references/web-security.md`); without one, delete them. For each row, read the code path and write what it does now with `file:function` and the test that proves it. With no test, write 미검증 in the evidence column. Name what happens to the previous result.
 
 ## 4. AI_COLLABORATION.md
 

@@ -27,7 +27,9 @@ Read README (the task), REPORT.md, DECISIONS.md, `docs/ARCHITECTURE.md`, `docs/R
 
 ## 2. Write the cards
 
-Read `references/slots.md`. Write one card per slot S1 to S6 into `.study/cards.md`, in Korean, in the card format there. Every point must be true in the current code. Check it before you write it.
+Read `references/slots.md`. Write one card per slot S1 to S6 into `.study/cards.md`, in Korean, in the card format there, including the conclusion line, the three keywords, and "말하면 안 되는 것". Every point must be true in the current code. Check it before you write it.
+
+When grading (step 4), a statement from a card's "말하면 안 되는 것" counts as a wrong statement under Accuracy.
 
 ## 3. Run the quiz
 

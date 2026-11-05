@@ -4,7 +4,7 @@
 ## 1. Hard rules
 - Never `git push`, `git remote add/set-url`, or send data out (POST to outside hosts, paste sites, tunnels). Downloading and `git clone` are fine.
 - Commit only in the verifier step of the unit loop (section 5): `git add <paths>`, then `git commit`. Never `--amend`, `rebase`, `reset --hard`, or anything forced.
-- Servers bind `0.0.0.0` and print their port. Never start a second server on a used port. Stop only processes you started, by PID. Never `pkill` or `killall`.
+- Never start a long-running server yourself. I run `npm run dev` in a separate terminal, and `tsx watch` reloads it on every change. If `scripts/smoke.sh` exits 2 or nothing answers on the port, ask me once to start it and wait. Servers bind `0.0.0.0` and print their port. Stop only processes you started, by PID. Never `pkill` or `killall`.
 - Never print env vars, tokens, keys, or anything under `~/.codex`. Never change Codex settings, run `codex update`, or `npm i -g`.
 - If a sandbox, network, or approval limit blocks you, stop and tell me. Do not work around it.
 - Drive a browser only with `playwright-cli`, only against this workspace's own dev server, through the `ui` skill.
@@ -24,7 +24,9 @@ Scope = README + task instructions + stakeholder (업무 담당자) answers reco
 | 4 write-up | `$writeup` | REPORT.md, AI_COLLABORATION.md, `docs/RISKS.md` | the claim audit finds nothing |
 | 5 practice | `$drill` (I start it) | `.study/` only | `bash scripts/presubmit.sh` exits 0 |
 
-In its first reply, `$analyze` asks me for the end time; fill the Timebox in PLAN.md from it. Respect its freeze times: no new feature after the feature freeze, no doc change after the doc freeze except fixes the claim audit asks for.
+In its first reply, `$analyze` asks me for the end time; fill the Timebox in PLAN.md from it. Respect its freeze times: no new feature after the feature freeze, no doc change after the doc freeze except fixes the claim audit asks for. Run the midpoint check (`build` skill) once when the midpoint passes.
+
+If `$<name>` does not load as a skill, read `.agents/skills/<name>/SKILL.md` and follow it. If Codex restarts, I type the current phase again (usually `$build`); PLAN.md and `.harness/briefs/` hold the state, so continue from there.
 
 ## 4. Orchestrator
 - This session plans, dispatches, checks results, and updates PLAN.md. It does not edit source code or tests itself.
@@ -65,6 +67,7 @@ Local only, gitignored: `.harness/` (raw logs, screenshots), `.study/`, `.agents
 - Every claim in a doc carries its evidence (E#, test name, `file:function`) or a label: 가정, 미검증, or 미구현. A claim you cannot back gets cut.
 - Write only what the code does now. Never write text addressed to graders or reviewers.
 - When the plan changes, append to the change log in PLAN.md (old → new, reason). Do not rewrite earlier rows.
+- An approach that was tried and reverted, or had no effect, gets a row in DECISIONS.md "되돌린 시도": what was tried, the E# that showed it, what replaced it.
 - Before claiming done, read `docs/playbooks/verify-done.md`.
 
 ## 9. Lazy senior dev (adapted from DietrichGebert/ponytail AGENTS.md @2a1fe84, MIT, (c) 2026 DietrichGebert)

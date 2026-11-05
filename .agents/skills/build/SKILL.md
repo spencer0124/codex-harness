@@ -8,9 +8,10 @@ description: Run the unit loop that implements PLAN.md units one at a time throu
 The orchestrator runs this loop. It never edits `src/` or `tests/` itself. It writes briefs, runs reproduce commands, logs F#s, and updates PLAN.md.
 
 ## Pick the next unit
-1. Read PLAN.md Timebox and Units. Take the first TODO row whose earlier units are DONE, PARTIAL, or CUT.
-2. Past the feature freeze: finish the DOING unit, fix failing tests, start nothing new. Mark the remaining TODO rows `CUT(시간)` with one change-log row. Then hand over to `$writeup`.
-3. An FE row runs the `ui` skill's steps in place of steps 2 to 4 below. Steps 1 and 5 stay the same.
+1. Read PLAN.md Timebox and Units. A DOING row means the last session stopped mid-unit: read `git status`, `git diff --stat`, and `.harness/briefs/U#-*`, then resume at the first step whose gate output is missing. Otherwise take the first TODO row whose earlier units are DONE, PARTIAL, or CUT.
+2. Midpoint check, once, at the first unit boundary after the Timebox midpoint: run `scripts/smoke.sh` in full and, if there is a screen, `$ui check`. Then estimate from the units done so far whether every remaining Must row fits before the feature freeze. If not, or if smoke fails on a DONE row, mark Should and Could rows `CUT(시간)` from the bottom until it fits, with one change-log row and the smoke E#. Tell the user in two lines.
+3. Past the feature freeze: finish the DOING unit, fix failing tests, start nothing new. Mark the remaining TODO rows `CUT(시간)` with one change-log row. Then hand over to `$writeup`.
+4. An FE row runs the `ui` skill's steps in place of steps 2 to 4 below. Steps 1 and 5 stay the same.
 
 ## The loop for one unit
 Set the row to DOING. Write every brief to `.harness/briefs/U#-<agent>.md` and give the agent that path.
@@ -40,10 +41,17 @@ Give a fresh `implementer` the brief plus the accepted findings. For each one it
 Retry budget: 3 fix rounds per unit. After the third failed round, set the row to PARTIAL, write what fails and why in the change log, and move on.
 
 ### 5. Verify and commit (verifier)
-A fresh `verifier` runs typecheck, the full suite, and `scripts/smoke.sh` when the unit touched the server. It writes the E#, sets the PLAN.md row and its R#s, and commits. Gate: the E# says `판정: PASS`, and `git log -1` shows the commit. A FAIL goes back to step 4 and counts toward the budget.
+A fresh `verifier` runs typecheck, the full suite, and `scripts/smoke.sh` when the unit touched the server. It writes the E#, sets the PLAN.md row and its R#s, and commits. Gate: the E# says `판정: PASS`, and `git log -1` shows the commit. A FAIL goes back to step 4 and counts toward the budget. Smoke exit 2 means no server is running, not a FAIL: ask the user once to run `npm run dev` in a separate terminal (AGENTS.md section 1), wait, and rerun.
 
-Report one line to the user per unit:
-`U3 DONE · R2, R4 · E7 PASS (vitest 24 passed) · F2 수용, F3 폐기 · 3f2a9c1`
+Report to the user per unit: one status line, then one line per F# judged in this unit, so the user knows each verdict and can overrule it.
+
+```text
+U3 DONE · R2, R4 · E7 PASS (vitest 24 passed) · 3f2a9c1
+  F2 수용: reviewer, 같은 요청을 두 번 보내면 결과가 두 번 저장됨 → 재현됨 (E6 FAIL), 테스트 추가 후 수정
+  F3 폐기: reviewer, 빈 입력 파일 처리 누락 → 재현 안 됨 (`npx vitest -t "R1: empty"` 통과)
+```
+
+The loop does not wait for an answer. If the user overrules a verdict ("F3 수용해"), change that F# row, append `(사용자 판단: <their words>)` to its 근거, and act on it as the next fix.
 
 ## Log every judged AI output in docs/AI_LOG.md
 One row per F#. An F# is any agent output you had to judge: review findings, and planner or implementer proposals you changed or refused.
@@ -53,6 +61,7 @@ One row per F#. An F# is any agent output you had to judge: review findings, and
 - 수용: applied as proposed.
 - 수정: applied differently. Say how it differs in 근거.
 - 폐기: not applied. Paste the output that showed it was wrong, or name the C# it contradicts.
+- A verdict the user made or changed carries `(사용자 판단: ...)` in 근거, in the user's words.
 
 Zero rows is a valid count. Never invent a row.
 

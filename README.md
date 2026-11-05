@@ -19,7 +19,7 @@ A process harness for Codex in a fresh task repository. The main session orchest
 	```
 
 3. Commit the harness: `git add -A && git commit -m "chore: apply codex-harness"`.
-4. Start Codex and run the phases in order.
+4. Start Codex and run the phases in order. Do not update Codex during the task. `doctor.sh` only reports the version.
 
 	| Phase | Type | You do |
 	|---|---|---|
@@ -29,6 +29,14 @@ A process harness for Codex in a fresh task repository. The main session orchest
 	| Write-up | `$writeup` | Read the docs after the feature freeze. |
 	| Practice | `$drill` | Answer the questions yourself, timed. |
 
+	While it runs:
+
+	- **Server.** Codex never starts the dev server. During the routes unit it asks you once: open a second terminal, run `npm run dev`, leave it running, and open that port in the IDE preview. `tsx watch` reloads it on every change.
+	- **Approvals.** The first time Codex asks to run the test suite, `git commit`, `curl` to localhost, or `playwright-cli`, choose the option that stops asking for that command. Otherwise the loop stops at every unit. Refuse wide deletes and global installs.
+	- **Verdicts.** Each unit report lists the review findings with 수용, 수정, or 폐기. Read them; they are what `AI_COLLABORATION.md` will say you did. To overrule one, reply `F3 수용해` with a reason. The loop does not wait for you.
+	- **Spot-check.** `$writeup` gives you three pairs of commands that print an input row and the result for it. Run them and reply `일치` or what differs.
+	- **Restart.** If Codex exits, start it again and type the current phase (usually `$build`). The state is in PLAN.md. If `$build` does not load as a skill, Codex reads `.agents/skills/build/SKILL.md` instead.
+
 5. Before you submit, move the practice material out and check that nothing of it is tracked.
 
 	```bash
@@ -36,7 +44,7 @@ A process harness for Codex in a fresh task repository. The main session orchest
 	bash scripts/presubmit.sh
 	```
 
-	The second run must print `presubmit: clean`. It fails when practice files are tracked, when the practice marker appears in a tracked file or in git history, or when a practice folder is still in the workspace.
+	The second run must print `presubmit: clean`. It fails when practice files are tracked, when the practice marker appears in a tracked file or in git history, or when a practice folder is still in the workspace. Save every open editor tab in the IDE before you submit.
 
 ## What lands in the workspace
 

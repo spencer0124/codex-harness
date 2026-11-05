@@ -61,11 +61,13 @@ If the preview proxy blocks the HMR websocket, reload the page by hand. Nothing 
 }
 ```
 
-`npm run dev` starts everything and prints the URL. If port 3000 is taken, run `PORT=3001 npm run dev`.
+`npm run dev` starts everything and prints the URL. The user runs it in a separate terminal and leaves it running (AGENTS.md section 1). If port 3000 is taken, run `PORT=3001 npm run dev`.
 
 ## Conventions
 - Dates: a local date is a `YYYY-MM-DD` string. A local time is minutes from midnight, and a time after midnight that belongs to the previous day is a value above 1440. Do calendar math on those values, never on `Date` in the server's timezone.
 - Numbers from input files: parse them at the boundary and reject or flag non-numeric, negative, or fractional values where a C# says integers.
+- Rule values: every threshold, limit, period, or unit a C# names lives in `src/domain/rules.ts` as a named constant with its source on the same line (`// C7: README L42` or `// C12: 담당자 답변`). Code never repeats the literal. The what-if entry varies these constants, so the sensitivity table and the docs point at one file.
+- Login, sessions, and CSRF: `references/web-security.md`.
 - Draw diagrams, paths, and charts with plain SVG in React first. Add a drawing or map library only when a C# needs it, and log it as a D#.
 - Styling follows the `ui` skill and `design/DESIGN.md`.
 - No database server, ORM, auth library, or global state manager unless a C# needs one.

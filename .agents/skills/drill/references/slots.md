@@ -46,6 +46,8 @@ Write one card per slot in `.study/cards.md`, in Korean.
 
 ```markdown
 ## S1 설계 선택
+- 결론 한 줄: <질문 전체에 대한 답 한 문장>
+- 키워드 3개: <`파일:함수`>, <숫자와 그 E#>, <테스트 이름>
 - 예상 질문: <위 형식으로 만든 질문>
 - 하위 질문 순서: 동작 → 이유 → 대안과 차이 → 포기한 것
 - 핵심 포인트:
@@ -54,6 +56,11 @@ Write one card per slot in `.study/cards.md`, in Korean.
   3. ...
 - 답 뼈대: <하위 질문마다 한 문장>
 - 약한 곳: <근거가 얇은 주장, 파일:줄>
+- 말하면 안 되는 것: <이 주제에서 검증하지 않았거나 만들지 않은 것. 라벨(미검증, 미구현, 가정)과 함께>
 ```
 
 Keep five to seven points per card. Every point names a file, a command, a test, an E#, or a number from an E#.
+
+The conclusion line and the three keywords are what the user recalls first under the timer. "말하면 안 되는 것" lists claims that would sound right but have no E# or test; saying them costs accuracy. Take them from 미검증, 미구현, and 가정 labels in the docs, ASSUMED and NOT-IMPLEMENTED rows in REPORT.md, and PARTIAL or CUT rows in PLAN.md.
+
+For S2, write the flow as a chain the user can say aloud: `파일:함수 → 파일:함수 → ...`. For S4, take three edge cases from the code, each as "입력 → 담당 함수 → 실제 동작". For S5, take three constants from `src/domain/rules.ts` and say what changing each does, from the what-if E# where it ran and marked 예측 where it did not.

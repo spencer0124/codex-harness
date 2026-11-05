@@ -20,6 +20,7 @@ Write the TypeScript types in `docs/ARCHITECTURE.md` under "데이터 모양": t
 ## 3. Fix the stack and the state rules
 - Use `references/stack.md` unless README prescribes another stack. A deviation is a D#.
 - Apply `references/stateful-ops.md` to every action that changes stored state. Each default that applies becomes an R# with source A# and its test row. A default that does not apply gets one line saying why in the change log.
+- If a C# names login, operators, roles, or state changes by a signed-in user, apply `references/web-security.md` the same way: its required tests become R#s, and the auth middleware and CSRF check land in the routes unit, not later.
 
 ## 4. Decide the core logic
 Find the one piece of logic the task is really about (the algorithm, the rule engine, the scoring). It gets a D# with every field filled:
@@ -60,6 +61,7 @@ Send one message and wait:
 2. The U# table: id, lane, R#s, check, estimated minutes, and the total against the feature freeze.
 3. The core D# in five lines: how it works, the alternatives, why, what it gives up.
 4. The A#s the plan relies on.
+5. One line for the user: during the routes unit Codex will ask once to run `npm run dev` in a separate terminal; leave it running and open its port in the preview.
 
 Record the answer as a change-log row (승인, or the edits and their reason). Then start `$build`.
 

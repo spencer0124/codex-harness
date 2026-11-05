@@ -24,7 +24,7 @@ Three modes:
 
 ## $ui: one FE unit
 1. Implement. Give a fresh `implementer` the brief plus: "Follow design/DESIGN.md and .agents/skills/ui/references/copy.md." Logic the brief names (formatting, sorting, what a state shows) gets a test first, as in any unit.
-2. Start the dev server if none runs (`npm run dev`, note the PID and port), or reuse the running one.
+2. Check the dev server: `curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:<port>/`. If nothing answers (`000`), ask the user once to run `npm run dev` in a separate terminal and wait. Never start it yourself (AGENTS.md section 1). The same check runs before `$ui check` and `$ui fix`.
 3. Shoot: `shoot.sh http://127.0.0.1:<port>/<path> U#`. Then shoot each state the brief names (empty, loading, error, long data) with the mocks in `references/checks.md`, labeled `U#-<state>`.
 4. Open and look at every screenshot. The checks catch geometry only. Looking catches wrong hierarchy, low contrast, misaligned numbers, a cramped view, and copy that reads machine-written. Write each problem down with its viewport and screenshot path.
 5. Review. Give a fresh `ui-tester` the brief path, the URL, and the states. It shoots and looks on its own and returns findings. It edits nothing.
