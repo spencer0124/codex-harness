@@ -3,6 +3,7 @@
 .agents/skills/drill/
 _workspace/
 .harness/
+var/
 node_modules/
 dist/
 .env

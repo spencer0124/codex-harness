@@ -45,4 +45,10 @@ printf 'answer card <!-- HARNESS-PRACTICE -->\n' >> "$WS/PLAN.md"; gitq add -A; 
 pre; rc=$?; check "presubmit: marker copied into a tracked doc fails" "[ $rc -ne 0 ] && grep -q 'PLAN.md' '$T/out'"
 
 echo "tests: $pass passed, $fail failed"
+for t in "$H"/tests/*.test.sh; do
+  [ -f "$t" ] || continue
+  out=$(bash "$t" 2>&1 | tail -1); echo "$(basename "$t"): $out"
+  case "$out" in *" 0 failed"*) ;; *) fail=$((fail + 1)) ;; esac
+done
+[ "$fail" -eq 0 ] && echo "all suites: OK" || echo "all suites: FAILED"
 [ "$fail" -eq 0 ]
