@@ -83,3 +83,9 @@ SOFTWARE.
 - Used: the section layout and token format of `design-md/apple/DESIGN.md` (Google Stitch DESIGN.md format) as the template for `design/DESIGN.md`. No text was copied. The values in `design/DESIGN.md` were measured from the reference site it names.
 - Source: https://github.com/VoltAgent/awesome-design-md
 - License: MIT.
+
+## openai/skills: security-best-practices
+
+- Used: `.agents/skills/security-best-practices/` (`SKILL.md`, `references/`, `agents/openai.yaml`, `LICENSE.txt`). No file was edited. The `writeup` skill runs it last in its verification step and sets where the report goes and how findings are fixed.
+- Source: https://github.com/openai/skills/tree/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/security-best-practices
+- License: Apache License 2.0. Full text in `.agents/skills/security-best-practices/LICENSE.txt`.

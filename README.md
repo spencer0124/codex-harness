@@ -27,7 +27,7 @@ A process harness for Codex in a fresh task repository. The main session orchest
 	| Approach | `$approach` | Codex fixes the criteria, compares candidates from three lenses, runs short spikes, and reports its pick on one screen. Approve it with a one-line reason; `$plan` then starts on its own. Run it in Default mode, not Plan mode. |
 	| Plan | `$plan` | Answer any questions its builder check raises, then approve the requirement and unit lists. |
 	| Build | `$build` | Nothing. Open the preview when the first screen lands. Report what looks wrong with `$ui fix <request>`. |
-	| Write-up | `$writeup` | Read the docs after the feature freeze. |
+	| Write-up | `$writeup` | Read the docs after the feature freeze. Its verification step boots the committed code in a temp copy on port 3100, then runs the security review last; critical findings go back to `$build`. |
 	| Practice | `$drill` | Answer the questions yourself, timed. Read the three-minute pitch script in `.study/pitch.md` aloud once and reply with the seconds. |
 
 	While it runs:
@@ -52,7 +52,7 @@ A process harness for Codex in a fresh task repository. The main session orchest
 | Path | Purpose |
 |---|---|
 | `AGENTS.md` | Rules Codex loads every session: phases, the orchestrator role, ids, tests, docs |
-| `.agents/skills/` | `analyze`, `approach`, `plan`, `build`, `ui`, `writeup`, `drill`, plus the vendored `frontend-design` and `humanize-korean` |
+| `.agents/skills/` | `analyze`, `approach`, `plan`, `build`, `ui`, `writeup`, `drill`, plus the vendored `frontend-design`, `humanize-korean`, and `security-best-practices` |
 | `.codex/agents/` | `analyst`, `planner`, `implementer`, `reviewer`, `verifier`, `ui-tester` |
 | `PLAN.md`, `DECISIONS.md`, `REPORT.md`, `AI_COLLABORATION.md` | Document skeletons, in Korean |
 | `docs/` | `analysis/` (conditions, questions, data profile), `ARCHITECTURE.md`, `EVIDENCE.md`, `AI_LOG.md`, `RISKS.md`, `playbooks/` |

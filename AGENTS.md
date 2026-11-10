@@ -4,7 +4,7 @@
 ## 1. Hard rules
 - Never `git push`, `git remote add/set-url`, or send data out (POST to outside hosts, paste sites, tunnels). Downloading and `git clone` are fine.
 - Commit only in the verifier step of the unit loop (section 5): `git add <paths>`, then `git commit`. Never `--amend`, `rebase`, `reset --hard`, or anything forced.
-- Never start a long-running server yourself. I run `npm run dev` in a separate terminal, and `tsx watch` reloads it on every change. If `scripts/smoke.sh` exits 2 or nothing answers on the port, ask me once to start it and wait. Servers bind `0.0.0.0` and print their port. Stop only processes you started, by PID. Never `pkill` or `killall`.
+- Never start a long-running server yourself, except the clean-boot check in the `writeup` skill (a temp copy on port 3100, stopped by PID). I run `npm run dev` in a separate terminal, and `tsx watch` reloads it on every change. If `scripts/smoke.sh` exits 2 or nothing answers on the port, ask me once to start it and wait. Servers bind `0.0.0.0` and print their port. Stop only processes you started, by PID. Never `pkill` or `killall`.
 - Never print env vars, tokens, keys, or anything under `~/.codex`. Never change Codex settings, run `codex update`, or `npm i -g`.
 - If a sandbox, network, or approval limit blocks you, stop and tell me. Do not work around it.
 - Drive a browser only with `playwright-cli`, only against this workspace's own dev server, through the `ui` skill.

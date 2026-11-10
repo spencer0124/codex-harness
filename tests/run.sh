@@ -13,6 +13,8 @@ WS="$T/ws"; mkdir -p "$WS"
 bash "$H/apply.sh" "$WS" > "$T/apply1" 2>&1
 check "apply: copies rules, plan, scripts, gitignore block" \
   '[ -f "$WS/AGENTS.md" ] && [ -f "$WS/PLAN.md" ] && [ -x "$WS/scripts/presubmit.sh" ] && grep -q "^# >>> codex-harness" "$WS/.gitignore"'
+check "apply: every skill the writeup skill names lands in the workspace, the vendored security skill with its license" \
+  '[ -f "$WS/.agents/skills/security-best-practices/SKILL.md" ] && [ -f "$WS/.agents/skills/security-best-practices/LICENSE.txt" ] && [ -f "$WS/.agents/skills/security-best-practices/references/javascript-express-web-server-security.md" ] && for s in $(grep -oE "the \`[a-z-]+\` skill" "$WS/.agents/skills/writeup/SKILL.md" | grep -oE "[a-z-]+\`" | tr -d "\`"); do [ -f "$WS/.agents/skills/$s/SKILL.md" ] || exit 1; done'
 check "apply: every phase skill named in AGENTS.md lands in the workspace" \
   'for s in $(grep -oE "^\| [0-9] [a-z-]+ \| \`\\\$[a-z]+" "$WS/AGENTS.md" | grep -oE "[a-z]+$"); do [ -f "$WS/.agents/skills/$s/SKILL.md" ] || exit 1; done'
 bash "$H/apply.sh" "$WS" > "$T/apply2" 2>&1

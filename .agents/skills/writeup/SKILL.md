@@ -22,6 +22,24 @@ PLAN.md (R#, U#, change log), DECISIONS.md, `docs/ARCHITECTURE.md`, `docs/analys
 3. If anything fails, stop the write-up and hand the failure back to the build loop.
 4. Spot-check by hand. Pick three records from the input data: an ordinary one, one at a boundary (a date edge, a limit), and one that a stakeholder C# makes an exception for. For each, give the user two short commands: one that prints the input row (`grep -n` or `sed -n` on the data file) and one that prints what the system produced for it (`curl -s` on the API, or a `node -e` one-liner over `var/`), plus one line on what should match. Do not wait; continue with step 2. When the user replies (`일치`, or what differs), write one E# per record with the commands as 명령, the user's words as 출력, and `판정: PASS (사람 확인)` or `판정: FAIL`. A mismatch goes back to the build loop.
 
+5. Clean boot. Prove the committed code runs the way a grader gets it, on port 3100 (never 8090, 8081, 2222, or the dev server's port). Run the block in one bash shell. `set -m` puts the server in its own process group, so the last `kill` stops npm and the node process under it; killing npm alone leaves node running:
+
+   ```bash
+   CB=$(mktemp -d) && git archive HEAD | tar -x -C "$CB" && (cd "$CB" && npm ci)
+   set -m; (cd "$CB" && PORT=3100 exec npm start > server.log 2>&1) & echo $! > "$CB/pid"; set +m
+   PORT=3100 SMOKE_WAIT=90 bash scripts/smoke.sh; kill -- -"$(cat "$CB/pid")"
+   ```
+
+   Record it as one E#. A failure means something the app needs is uncommitted or missing from `package.json`: hand it back to the build loop. If the task asks for a Dockerfile, docker compose, or a run guide such as `How_to_use.md`, write them now from the commands that just passed:
+   - Dockerfile: `node:<major>-slim` matching `node -v`, `npm ci` (keep devDependencies: `npm start` runs `vite build` and `tsx`), `ENV NODE_ENV=production`, `USER node`, `EXPOSE` the port, `CMD ["npm", "start"]`. `.dockerignore`: `node_modules`, `.git`, `.harness`, `.study`, `_workspace`, `var`.
+   - If `docker` runs here, build, run, and smoke it as one E#. If not, write `docker 미검증 (docker 없음)` in that E#.
+   - Run guide, in Korean: install, start, port, and test commands copied from the clean-boot E#, plus the sample accounts if there is a login.
+6. Security review, last. Run the `security-best-practices` skill in report mode on `src/` with these overrides, then continue with step 2:
+   - Write the report to `.harness/security-report.md`, never to the repository root.
+   - Log each critical or high finding as an F# in `docs/AI_LOG.md` with its rule id (`EXPRESS-BODY-001`). Fix it through the build loop: test first, one unit, the verifier commits. Never fix it inside this skill.
+   - Keep the harness rules where they differ: no new dependency (set the headers or limits a finding asks of `helmet` or a rate limiter in a few lines, or log the F# as 폐기 with the reason); CSRF and cookies stay as `plan/references/web-security.md` sets them; ids the task data defines stay; skip `npm audit`, since it sends the dependency list out, and say so in the reply.
+   - Medium and lower findings: an F# with 수용 or 폐기 and one line each. Those left open go into `docs/RISKS.md` as known weaknesses.
+
 Every number in a doc is copied from an E#. Never type a number from memory.
 
 ## 2. REPORT.md
@@ -84,4 +102,4 @@ If the skill is not installed, skip this step and say so in the reply.
 
 ## Reply
 
-Use the AGENTS.md reply format. Under "Verified", paste the last E# lines from step 1 and the `check-refs: 0 missing` line from step 6. Under "Skipped", list claims you cut and cases you dropped, one line each.
+Use the AGENTS.md reply format. Under "Verified", paste the last E# lines from step 1, the clean-boot E#, the count of security findings by severity, and the `check-refs: 0 missing` line from step 6. Under "Skipped", list claims you cut and cases you dropped, one line each.
