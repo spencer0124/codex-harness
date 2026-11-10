@@ -60,6 +60,7 @@ mk good \
 check "fill-in markers present in smoke.sh" "grep -q '^check_cookie R1' '$D/good.sh'"
 run good; rc=$?
 check "login, protected route, CSRF checks: all pass, exit 0" "[ $rc -eq 0 ] && grep -q 'smoke: 6 passed, 0 failed' '$D/out'"
+check "check prints the response time" "grep -qE 'PASS R0 GET / -> 200 in [0-9]+\\.[0-9]+s' '$D/out'"
 check "cookie jar carries the login into the protected check" "grep -q 'PASS R1 GET /api/me -> 200' '$D/out'"
 check "check sends the CSRF header on POST" "grep -q 'PASS R2 POST /api/items -> 201' '$D/out'"
 check "check_no_csrf sees 403" "grep -q 'PASS R2 POST /api/items without CSRF header -> 403' '$D/out'"

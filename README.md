@@ -24,7 +24,8 @@ A process harness for Codex in a fresh task repository. The main session orchest
 	| Phase | Type | You do |
 	|---|---|---|
 	| Analysis | `$analyze` | Give the end time. Send the question block to the stakeholder and paste the answers back with `$analyze integrate`. Repeat until no P0 or P1 question is open. |
-	| Plan | `$plan` | Approve the requirement and unit lists. This is the only planned checkpoint. |
+	| Approach | `$approach` | Codex fixes the criteria, compares candidates from three lenses, runs short spikes, and reports its pick on one screen. Approve it with a one-line reason; `$plan` then starts on its own. Run it in Default mode, not Plan mode. |
+	| Plan | `$plan` | Answer any questions its builder check raises, then approve the requirement and unit lists. |
 	| Build | `$build` | Nothing. Open the preview when the first screen lands. Report what looks wrong with `$ui fix <request>`. |
 	| Write-up | `$writeup` | Read the docs after the feature freeze. |
 	| Practice | `$drill` | Answer the questions yourself, timed. |
@@ -51,7 +52,7 @@ A process harness for Codex in a fresh task repository. The main session orchest
 | Path | Purpose |
 |---|---|
 | `AGENTS.md` | Rules Codex loads every session: phases, the orchestrator role, ids, tests, docs |
-| `.agents/skills/` | `analyze`, `plan`, `build`, `ui`, `writeup`, `drill`, plus the vendored `frontend-design` and `humanize-korean` |
+| `.agents/skills/` | `analyze`, `approach`, `plan`, `build`, `ui`, `writeup`, `drill`, plus the vendored `frontend-design` and `humanize-korean` |
 | `.codex/agents/` | `analyst`, `planner`, `implementer`, `reviewer`, `verifier`, `ui-tester` |
 | `PLAN.md`, `DECISIONS.md`, `REPORT.md`, `AI_COLLABORATION.md` | Document skeletons, in Korean |
 | `docs/` | `analysis/` (conditions, questions, data profile), `ARCHITECTURE.md`, `EVIDENCE.md`, `AI_LOG.md`, `RISKS.md`, `playbooks/` |
@@ -67,4 +68,4 @@ A process harness for Codex in a fresh task repository. The main session orchest
 
 ## Sources
 
-Section 9 of `AGENTS.md` is a condensed excerpt of [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) (MIT). Vendored skills and their licenses are listed in `THIRD_PARTY.md`.
+Section 9 of `AGENTS.md` is a condensed excerpt of [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) (MIT). The `approach` skill and the builder check in the `plan` skill adapt the `brainstorming` skill of [obra/superpowers](https://github.com/obra/superpowers) (MIT). The `approach` skill also follows the independent drafts and blind comparison of pstack `arena` and [karpathy/llm-council](https://github.com/karpathy/llm-council), and the [MADR](https://adr.github.io/madr/) decision layout; no text from those was copied. Vendored skills and their licenses are listed in `THIRD_PARTY.md`.

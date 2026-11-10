@@ -50,7 +50,9 @@ Ask every P0 fact twice: once as a rule and once as a concrete example. "마감�
 
 ## Success definition
 - What a good result is: the metric, its exact definition, its unit, whether lower or higher is better, and the baseline to compare against.
-- Who judges the result and what they look at first.
+- Who judges the result and what they look at first. In a fab, ask which number they watch daily (throughput, moves, utilization, TAT) and put it first on the result screen.
+- How the work is done today (FIFO, a fixed cycle, a spec-only check, a spreadsheet), with enough detail to reproduce it on the data. A new tool gets used only when it clearly beats that and needs no setup.
+- When two measures conflict, which gives way. Offer a default to confirm: the one with less effect on output.
 - Ties between equal results, and whether the same input must always give the same output.
 - Whether a rule-based result is acceptable or an optimized one is expected, and whether the choice must be explainable to the user.
 

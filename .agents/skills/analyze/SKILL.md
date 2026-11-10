@@ -69,7 +69,7 @@ Q4. …?
 2. Write the Goal in PLAN.md (one line with its README line) and the Requirements. Group C#s into R#s. Each R# cites its C#s or A#s and has an acceptance criterion that a test or a smoke line can check: a given input and the expected result. Items the README or the stakeholder calls required are Must.
 3. Check coverage: every C# is cited by an R#, or its 반영 R# cell says 배경. List each C# that is neither.
 4. Check that the Timebox in PLAN.md is filled. If the user has not given the end time, ask again.
-5. Reply with the R# count per priority, the A# list (the user may overrule any of them), the uncovered C#s, and "next: `$plan`".
+5. Reply with the R# count per priority, the A# list (the user may overrule any of them), the uncovered C#s, and "next: `$approach`".
 
 ## Rules
 

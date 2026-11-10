@@ -92,7 +92,10 @@ When the what-if entry unit is DONE, write `scripts/what-if.scenarios.json`: the
 - Each rule constant a C# names: up, down, zero, a fractional value.
 - Each numeric field of the input data (durations, distances, counts): all zero, fractional, one value missing. The entry applies these as params to a copy of the data.
 - An empty input set and the largest size.
-- `baseline`: the plainest method a reader would try first (one metric only, or no optimization) on the base data. The entry switches to it with a param.
+- `asis`: how the work is done today, from README, a stakeholder answer, or shipped code (FIFO, a fixed cycle, a spec-only check), on the base data. If no source says how, write `asis` 미확인 in the E# and keep only `baseline`.
+- `baseline`: the plainest method a reader would try first (one metric only, or no optimization) on the base data.
+
+The entry switches to `asis` or `baseline` with a param. The table prints `ms`, the run time of each row; the largest-size row is the speed evidence. When the result screen shows the target measure, show the `asis` value next to it, from the same entry.
 
 `run()` returns the number of broken rules from `src/domain/check.ts` as `ruleViolations`, next to the metrics. Then run:
 

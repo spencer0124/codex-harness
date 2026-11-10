@@ -1,17 +1,18 @@
 ---
 name: plan
-description: Turn analyzed requirements into an architecture, decisions, and an ordered unit list, then get the user's one approval. Use after $analyze has no OPEN P0 or P1 question, or when the user says "plan" or "$plan".
+description: Turn analyzed requirements and the approved core approach into an architecture, decisions, and an ordered unit list, then get the user's approval. `$approach` starts it on approval; the user can also say "plan" or "$plan".
 ---
 
 # Plan
 
 The orchestrator runs this skill. The `planner` agent drafts, the orchestrator checks and merges.
 
-Inputs: PLAN.md Requirements and Timebox, `docs/analysis/CONDITIONS.md` (C#, A#), `docs/analysis/DATA.md`, README.
+Inputs: PLAN.md Requirements and Timebox, `docs/analysis/CONDITIONS.md` (C#, A#), `docs/analysis/DATA.md`, DECISIONS.md D1, README.
 Outputs: `docs/ARCHITECTURE.md`, D#s in DECISIONS.md, PLAN.md Units, one change-log row.
 
 ## 1. Check the inputs
 - Every Must R# cites a C# or an A#, and has an acceptance criterion a test or smoke line can check. If not, go back to `$analyze`.
+- D1 상태 is `승인됨` and `사용자 승인 (원문)` holds the user's reply. If not, go back to `$approach`. Never pick or swap the core approach here.
 - Read the Timebox. Plan the Must units to finish before the feature freeze with about 20% slack.
 
 ## 2. Name the data shapes first
@@ -22,17 +23,14 @@ Write the TypeScript types in `docs/ARCHITECTURE.md` under "데이터 모양": t
 - Apply `references/stateful-ops.md` to every action that changes stored state. Each default that applies becomes an R# with source A# and its test row. A default that does not apply gets one line saying why in the change log.
 - If a C# names login, operators, roles, or state changes by a signed-in user, apply `references/web-security.md` the same way: its required tests become R#s, and the auth middleware and CSRF check land in the routes unit, not later.
 
-## 4. Decide the core logic
-Find the one piece of logic the task is really about (the algorithm, the rule engine, the scoring). It gets a D# with every field filled:
-- 기준: what counts as a better result, in priority order, and the `file:function` that computes it.
+## 4. Detail the core logic
+D1 already holds the approved approach, the criteria, every candidate, and the spike E#s from `$approach`. Do not reopen the choice. Fill the rest of D1:
+- 기준: the `file:function` that will compute the target measure.
 - 동작 방식: 3 to 5 numbered steps a reader can follow without code.
-- 기각한 대안: the alternatives you considered, plus each common family that fits this kind of problem: optimizing one metric only, a weighted sum of metrics, an exact or global solver, and, for a recommendation, modes or weights the user picks. One line each on how it differs. If you did not run one, write "검토만, 실측 안 함". Listing a family you reviewed is fine; claiming you ran one you did not is not.
-- 이유: why this one fits the C#s and the Timebox.
-- 포기한 것: what this choice gives up (optimality, speed, a feature, a case it handles badly).
-- 증거: test names now, a what-if E# later (`build` skill, what-if step).
+- 증거: the spike E#s now, test names next, a what-if E# later (`build` skill, what-if step).
 - 약점과 장애 시 동작: when it gives a bad answer and what the user sees.
 
-If the choice is unclear, spawn up to 3 read-only `planner` agents, one per alternative, each returning how it works, its cost, its edge cases, and what it gives up in under 15 lines. Cap this at 10 minutes. Then decide.
+If a C#, a stakeholder answer, or the Timebox makes the picked approach unworkable, stop and go back to `$approach` with the reason. Do not swap it yourself.
 
 Log a D# for every other real choice only (storage, a library, a rule interpretation). Never invent alternatives.
 
@@ -54,22 +52,39 @@ Write PLAN.md Units. Rules:
   3. BE: routes with smoke lines. Fix the API contract (request and response types in `src/domain/`) here.
   4. FE: the first screen against the real API, so a human can open the preview early.
   5. Then alternate BE and FE units by R# priority.
-  6. BE: the what-if entry (`src/domain/what-if-entry.ts` exporting `run(params)`, with a `baseline` param and a `ruleViolations` metric; `build` skill, what-if step) once the core logic is DONE.
+  6. BE: the what-if entry (`src/domain/what-if-entry.ts` exporting `run(params)`, with `asis` and `baseline` params and a `ruleViolations` metric; `build` skill, what-if step) once the core logic is DONE.
 - Must units first. Should and Could units go after them and are the first to be cut at the feature freeze.
 - Each row lists the files it touches. Two units never touch the same file in one pass.
 
-## 7. Get approval (the only planned checkpoint)
+## 7. Builder check
+Adapted from the builder check in obra/superpowers `brainstorming` (MIT). Spawn a fresh read-only `planner` agent with this brief, so a reader who was not in the conversation tests the documents:
+
+```text
+You are a talented software engineer. You've been handed PLAN.md, docs/ARCHITECTURE.md, and DECISIONS.md and asked to build what they describe. You will not be able to talk to the person who wrote them.
+Report only the questions you'd still need answered before you could plan this well: places where you'd have to guess and a wrong guess would matter. For each, give the question and why the answer changes the plan. Rank them by importance.
+Skip anything the documents explicitly leave to the builder, and anything you could reasonably decide yourself. Skip nitpicks about wording.
+If nothing important is left, say "nothing important left". Return your answer as markdown. Do not write files.
+```
+
+If this Codex build cannot spawn agents, read the documents as that builder yourself and say so in the step 8 message. Sort what comes back into three piles:
+- Answered already by a C#, an A#, or the task files: put the answer in the document.
+- Minor: a sensible builder could settle it without changing what gets built. Settle it, and log it as an A# or a D# marked as your call.
+- Theirs: only the user or the stakeholder can answer it, and the answer changes what gets built. Add each stakeholder question to QUESTIONS.md as a Q# and put them in the step 8 message as a copy-ready block, most important first.
+
+## 8. Get approval
 Send one message and wait:
 1. The R# table: id, one-line requirement, source, priority.
 2. The U# table: id, lane, R#s, check, estimated minutes, and the total against the feature freeze.
-3. The core D# in six lines: the criterion, how it works, the alternatives, why, what it gives up, and the hard rules `check.ts` will enforce.
-4. The A#s the plan relies on.
-5. One line for the user: during the routes unit Codex will ask once to run `npm run dev` in a separate terminal; leave it running and open its port in the preview.
+3. The core D# in six lines: the approved approach and the E# that decided it, the criterion, how it works, what it gives up, and the hard rules `check.ts` will enforce.
+4. The A#s the plan relies on, and the calls you made in the builder check.
+5. The "theirs" questions from the builder check, if any.
+6. One line for the user: during the routes unit Codex will ask once to run `npm run dev` in a separate terminal; leave it running and open its port in the preview.
 
 Record the answer as a change-log row (승인, or the edits and their reason). Then start `$build`.
 
 ## Done when
 - `docs/ARCHITECTURE.md` has types, one flow per user action, and the module table with one owner per state.
-- The core D# has every field, with 증거 marked "build 후 채움" where it waits on tests.
+- The core D# has every field, with the user's approval quoted unchanged and 증거 marked "build 후 채움" where it waits on tests.
+- The builder check ran, and each "theirs" question is answered or recorded as an A#.
 - Every Must R# appears in at least one U#, and every U# names its check.
 - The user approved, and the change log says so.

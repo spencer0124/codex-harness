@@ -30,7 +30,7 @@ Fill `REPORT.md` section by section from its template.
 
 - Traceability: one row per R#. Status is one of VERIFIED (a test or smoke line passed, E# cited), HUMAN-CHECKED (the user saw it in the preview, or ran a step 1.4 spot-check; record what, where, and when, and cite the E#), ASSUMED (rests on an A#), NOT-IMPLEMENTED. Fill "확인 방법" for every row: the command to rerun, the preview path and steps, or the A# to read.
 - 규칙 준수: one row per hard rule, from `src/domain/check.ts` and its tests. Say whether the check runs before every save or only in tests. A rule with no check is 미검증.
-- 지표와 민감도: each metric's definition as the code computes it (`file:function`), the what-if table from step 1 pasted as printed, one line per variant on what changed and which code explains it, then the limits of each metric and what is still unmeasured. A claim that the result is better cites its difference from the `baseline` row, with the E#. With no `baseline` row, write that the improvement is unmeasured. If a prediction and a measurement disagree, write both.
+- 지표와 민감도: each metric's definition as the code computes it (`file:function`), the what-if table from step 1 pasted as printed, one line per variant on what changed and which code explains it, then the limits of each metric and what is still unmeasured. A claim that the result is better cites its difference from the `asis` row (current practice) and the `baseline` row, with the E#. With neither row, write that the improvement is unmeasured. Speed claims cite the `ms` of the largest-size row. If a prediction and a measurement disagree, write both.
 - Limitations: weakness (`file:function`), when it breaks, the next check.
 
 ## 3. docs/RISKS.md
@@ -46,7 +46,7 @@ Fill one row per situation in the template: condition change, mid-way failure, c
 
 ## 5. DECISIONS.md
 
-D1 holds the core decision, the one the product depends on. Check that it has every field in the template: the criterion in priority order, how it works with `file:function`, each rejected alternative and how it differs (including the common families the `plan` skill lists, marked 검토만, 실측 안 함 where not run), what was given up, evidence, known weakness. Fill gaps from the code and the change log. Never claim an alternative was run or measured without an E# or a 되돌린 시도 row.
+D1 holds the core decision, the one the product depends on. Check that it has every field in the template: the criterion in priority order, how it works with `file:function`, the criteria fixed before the candidates, the user's approval quoted unchanged, each rejected alternative and how it differs (including the common families the `approach` skill lists, marked 검토만, 실측 안 함 where not run), what was given up, evidence, known weakness. Fill gaps from the code and the change log. Never claim an alternative was run or measured without an E# or a 되돌린 시도 row.
 
 ## 6. Claim audit
 

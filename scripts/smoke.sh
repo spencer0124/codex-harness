@@ -22,11 +22,12 @@ done
 req() {
   local method=$1 path=$2 body=$3; shift 3
   if [ -n "$body" ]; then
-    code=$(curl -s -m 10 -o "$OUT" -D "$HDR" -w '%{http_code}' -b "$JAR" -c "$JAR" -X "$method" "$@" \
+    res=$(curl -s -m 10 -o "$OUT" -D "$HDR" -w '%{http_code} %{time_total}' -b "$JAR" -c "$JAR" -X "$method" "$@" \
       -H 'Content-Type: application/json' --data "$body" "$BASE$path")
   else
-    code=$(curl -s -m 10 -o "$OUT" -D "$HDR" -w '%{http_code}' -b "$JAR" -c "$JAR" -X "$method" "$@" "$BASE$path")
+    res=$(curl -s -m 10 -o "$OUT" -D "$HDR" -w '%{http_code} %{time_total}' -b "$JAR" -c "$JAR" -X "$method" "$@" "$BASE$path")
   fi
+  code=${res%% *}; secs=${res##* }
 }
 send() { # send <METHOD> <PATH> <BODY_JSON>   Adds $CSRF_HEADER to every request that is not GET or HEAD.
   case "$1" in GET|HEAD) req "$1" "$2" "$3" ;; *) req "$1" "$2" "$3" -H "$CSRF_HEADER" ;; esac
@@ -34,14 +35,14 @@ send() { # send <METHOD> <PATH> <BODY_JSON>   Adds $CSRF_HEADER to every request
 ok() { pass=$((pass+1)); echo "PASS $*"; }
 bad() { fail=$((fail+1)); echo "FAIL $*"; head -c 300 "$OUT"; echo; }
 
-# check <R#> <METHOD> <PATH> <EXPECTED_STATUS> [BODY_JSON] [MUST_CONTAIN]
+# check <R#> <METHOD> <PATH> <EXPECTED_STATUS> [BODY_JSON] [MUST_CONTAIN]   Prints the response time; point one check at the largest input for the speed E#.
 check() {
   local id=$1 method=$2 path=$3 want=$4 body=${5:-} needle=${6:-}
   send "$method" "$path" "$body"
   if [ "$code" = "$want" ] && { [ -z "$needle" ] || grep -q -- "$needle" "$OUT"; }; then
-    ok "$id $method $path -> $code"
+    ok "$id $method $path -> $code in ${secs}s"
   else
-    bad "$id $method $path -> $code (want $want${needle:+, contains '$needle'})"
+    bad "$id $method $path -> $code in ${secs}s (want $want${needle:+, contains '$needle'})"
   fi
 }
 

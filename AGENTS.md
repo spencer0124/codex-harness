@@ -19,10 +19,11 @@ Scope = README + task instructions + stakeholder (업무 담당자) answers reco
 |---|---|---|---|
 | 0 setup | `bash scripts/doctor.sh` | nothing | no `FAIL` line |
 | 1 analysis | `$analyze` | `docs/analysis/`, PLAN.md requirements | no OPEN P0 or P1 question |
-| 2 plan | `$plan` | PLAN.md units, `docs/ARCHITECTURE.md`, DECISIONS.md | I approve the R# and U# lists (the only planned checkpoint) |
-| 3 build | `$build` (BE lane), `$ui` (FE lane) | code, tests, `docs/EVIDENCE.md`, `docs/AI_LOG.md` | every Must R# is DONE, or CUT with a reason |
-| 4 write-up | `$writeup` | REPORT.md, AI_COLLABORATION.md, `docs/RISKS.md` | the claim audit finds nothing |
-| 5 practice | `$drill` (I start it) | `.study/` only | `bash scripts/presubmit.sh` exits 0 |
+| 2 approach | `$approach` (Default mode, not Plan mode) | DECISIONS.md D1, spike E#s | I approve the reported pick; then `$plan` starts on its own |
+| 3 plan | `$plan` | PLAN.md units, `docs/ARCHITECTURE.md`, DECISIONS.md | I approve the R# and U# lists |
+| 4 build | `$build` (BE lane), `$ui` (FE lane) | code, tests, `docs/EVIDENCE.md`, `docs/AI_LOG.md` | every Must R# is DONE, or CUT with a reason |
+| 5 write-up | `$writeup` | REPORT.md, AI_COLLABORATION.md, `docs/RISKS.md` | the claim audit finds nothing |
+| 6 practice | `$drill` (I start it) | `.study/` only | `bash scripts/presubmit.sh` exits 0 |
 
 In its first reply, `$analyze` asks me for the end time; fill the Timebox in PLAN.md from it. Respect its freeze times: no new feature after the feature freeze, no doc change after the doc freeze except fixes the claim audit asks for. Run the midpoint check (`build` skill) once when the midpoint passes.
 
@@ -34,7 +35,8 @@ If `$<name>` does not load as a skill, read `.agents/skills/<name>/SKILL.md` and
 - Each brief names the U#, its R#s, the C#s and A#s that constrain it, the files to touch, and the done check. A subagent sees only its brief.
 - Check every result against the workspace (`git diff --stat`, the test output) before you mark anything done. A summary is not evidence.
 - If this Codex build cannot spawn subagents, run the same steps yourself in the same order and say so once.
-- Stop and ask me only when README and a stakeholder answer conflict, a test looks wrong, a section 1 limit blocks you, or phase 2 needs approval. Decide everything else, log it as a D# or a change-log row, and keep going.
+- Stop and ask me only when README and a stakeholder answer conflict, a test looks wrong, a section 1 limit blocks you, or phase 2 or phase 3 needs approval. Decide everything else, log it as a D# or a change-log row, and keep going.
+- You pick the core approach in `$approach`, from criteria fixed before the candidates and numbers with E#s. Never start building on it before I approve the report.
 
 ## 5. Unit loop
 Each U# runs: planner (brief) → implementer (red, then green) → reviewer (tries to break it, every F# with a reproduce command) → implementer (fixes accepted F#s, test first) → verifier (full suite and smoke, E# in `docs/EVIDENCE.md`, PLAN.md status, commit `<type>(R#): <what>`). The `build` skill holds the detail.

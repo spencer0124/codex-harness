@@ -26,6 +26,7 @@ cat "$T/out"
 check "what-if: valid scenarios exit 0" "[ $rc -eq 0 ]"
 check "what-if: base row has raw values" "grep -q '^| base | - | 3 | 33.333 |' '$T/out'"
 check "what-if: variant shows delta against base" "grep -q '^| smaller | .*| 4 (+1) | 25 (-8.333) |' '$T/out'"
+check "what-if: every row ends with its run time in ms" "grep -q '| ms |\$' '$T/out' && grep -qE '^\\| same \\|.*\\| [0-9]+\\.[0-9] \\|\$' '$T/out'"
 check "what-if: unchanged metric shows ±0" "grep -q '^| same | .*| 3 (±0) |' '$T/out'"
 
 node "$H/scripts/what-if.mjs" "$T/entry.mjs" "$T/bad.json" > "$T/out" 2>&1; rc=$?
