@@ -1,13 +1,13 @@
 ---
 name: drill
-description: Practice answering timed written questions about this submission, then grade the answers against the repository. Start only when the user types $drill. Never invoke it on your own or from another skill.
+description: Practice answering timed written questions about this submission, grade the answers against the repository, and write a three-minute pitch script from the evidence. Start only when the user types $drill. Never invoke it on your own or from another skill.
 ---
 
 # Drill
 
-The user practices explaining their own submission in their own words. You ask, they type, you grade against the repository. You never edit a tracked file.
+The user practices explaining their own submission in their own words. You ask, they type, you grade against the repository. You also write the script for a three-minute spoken pitch. You never edit a tracked file.
 
-Arguments: none runs cards, then the quiz. `cards` writes cards only. `quiz` skips the cards. `S1` to `S6` asks one slot. A number such as `quiz 3` sets the question count.
+Arguments: none runs cards, then the pitch script, then the quiz. `cards` writes cards only. `pitch` writes the pitch script only. `quiz` skips the cards and the pitch. `S1` to `S6` asks one slot. A number such as `quiz 3` sets the question count.
 
 ## Files
 
@@ -19,7 +19,7 @@ Arguments: none runs cards, then the quiz. `cards` writes cards only. `quiz` ski
 
   `scripts/presubmit.sh` fails if that line shows up in a tracked file or in git history, and moves `.study/` out of the workspace before submission. Append to existing files below the first line. Never write the line anywhere else.
 - Before writing, run `git check-ignore -q .study/cards.md`. If it exits nonzero, stop and tell the user to rerun `apply.sh`.
-- Files: `.study/cards.md` (one card per slot), `.study/attempts.md` (every graded answer), `.study/weak-claims.md` (claims the user could not defend).
+- Files: `.study/cards.md` (one card per slot), `.study/attempts.md` (every graded answer), `.study/weak-claims.md` (claims the user could not defend), `.study/pitch.md` (the pitch script).
 
 ## 1. Read the submission
 
@@ -30,6 +30,25 @@ Read README (the task), REPORT.md, DECISIONS.md, `docs/ARCHITECTURE.md`, `docs/R
 Read `references/slots.md`. Write one card per slot S1 to S6 into `.study/cards.md`, in Korean, in the card format there: the conclusion line, the three keywords, both expected questions (A and B), "변형 대비", and "말하면 안 되는 것". Every point must be true in the current code. Check it before you write it.
 
 When grading (step 4), a statement from a card's "말하면 안 되는 것" counts as a wrong statement under Accuracy.
+
+## 2b. Write the pitch script
+
+The pitch is spoken, about three minutes, with no slides assumed; at most the running product is on screen. Paper is not allowed in the room, so the user memorizes it. Write `.study/pitch.md` in Korean, spoken style, in five parts:
+
+| Part | Seconds | Content |
+|---|---|---|
+| 문제 | 20 | The task in the stakeholder's words, and the bottleneck they named (C#) |
+| 데모 | 60 | One screen: the target measure next to its `asis` value. Name the screen path and the clicks |
+| 검증 | 40 | Rule violations, the difference from `asis` and `baseline`, the `ms` of the largest-size row |
+| 한계 | 40 | One weakness from REPORT.md Limitations, and what the system does when it cannot decide |
+| 마무리 | 10 | One sentence: the number, and the stakeholder question that produced it |
+
+- Every number is copied from an E#. Put the E# in brackets after the sentence so the user can check it; they do not say it aloud.
+- About 300 Korean characters per minute of speech: keep the script under 900 characters.
+- No claim the repository does not back. Nothing from a card's "말하면 안 되는 것". If `asis` is 미확인, say the comparison is against the plainest method only.
+- Below the script, list two questions a judge would likely ask (why this approach, what breaks first), each with a three-line answer skeleton.
+
+Then tell the user, in Korean: read it aloud once with a phone timer and reply with the seconds. Over 190 seconds, cut the 데모 or 한계 lines that carry no number and rewrite. Do not wait for the reply before the quiz.
 
 ## 3. Run the quiz
 

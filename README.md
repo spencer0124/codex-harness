@@ -28,7 +28,7 @@ A process harness for Codex in a fresh task repository. The main session orchest
 	| Plan | `$plan` | Answer any questions its builder check raises, then approve the requirement and unit lists. |
 	| Build | `$build` | Nothing. Open the preview when the first screen lands. Report what looks wrong with `$ui fix <request>`. |
 	| Write-up | `$writeup` | Read the docs after the feature freeze. |
-	| Practice | `$drill` | Answer the questions yourself, timed. |
+	| Practice | `$drill` | Answer the questions yourself, timed. Read the three-minute pitch script in `.study/pitch.md` aloud once and reply with the seconds. |
 
 	While it runs:
 

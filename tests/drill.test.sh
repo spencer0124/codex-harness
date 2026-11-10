@@ -17,6 +17,8 @@ for s in writeup drill; do
 done
 check "drill: every reference the skill names exists" \
   "grep -oE 'references/[a-z-]+\.md' '$H/.agents/skills/drill/SKILL.md' | sort -u | while read -r r; do [ -f '$H/.agents/skills/drill/'\"\$r\" ] || exit 1; done"
+check "drill: writes the pitch script under .study/ and runs it by default" \
+  "grep -q '`.study/pitch.md`' '$H/.agents/skills/drill/SKILL.md' && grep -q 'none runs cards, then the pitch script, then the quiz' '$H/.agents/skills/drill/SKILL.md'"
 check "marker: appears only in the drill skill and tests" \
   "[ -z \"\$(grep -rlF '$MARK' '$H' --exclude-dir=.git --exclude-dir=private --exclude-dir=tests | grep -v '/.agents/skills/drill/')\" ]"
 
