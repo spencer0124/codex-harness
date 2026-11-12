@@ -1,13 +1,26 @@
-# codex-harness
+<p align="center">
+  <img src="https://upload.wikimedia.org/wikipedia/en/d/db/Yoshi_%28Nintendo_character%29.png" alt="Yoshi" width="160">
+</p>
+
+# yoshi-hackathon
 
 A process harness for Codex in a fresh task repository. The main session orchestrates. Custom agents analyze the task, build each unit test-first, review it, and verify it. Every step leaves evidence that the final docs cite. The harness holds no application code.
+
+## What it does at a hackathon
+
+- **Pins down the task.** Turns the brief into conditions and open questions, and runs the Q&A rounds with the stakeholder until nothing important is open.
+- **Picks an approach.** Compares candidate designs from three angles, runs short spikes, and shows the pick on one screen for you to approve.
+- **Builds while you watch.** Writes each unit test-first, reviews it, and verifies it in the browser, so you only open the preview and report what looks wrong.
+- **Writes the submission.** Produces the report, the decision log, and the AI collaboration log from the evidence, boots the committed code in a clean copy, and runs a security review last.
+- **Prepares the pitch.** Drills you with timed questions and a three-minute pitch script.
+- **Keeps it clean.** Checks before you submit that no practice material is tracked or left in git history.
 
 ## Use it on a task
 
 1. Apply the harness to the workspace. It copies files only, needs no network, and keeps any file that already exists.
 
 	```bash
-	git clone https://github.com/spencer0124/codex-harness ~/harness
+	git clone https://github.com/spencer0124/yoshi-hackathon ~/harness
 	bash ~/harness/apply.sh "$PWD"
 	```
 
